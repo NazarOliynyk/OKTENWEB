@@ -1,16 +1,11 @@
 package NotePad;
 
-import HW004Composition.Email;
-import JobAdds.*;
-import sun.invoke.empty.Empty;
-
 import java.util.ArrayList;
 import java.util.TreeSet;
 
 import static NotePad.Type.*;
 
 public class Main_Base {
-
 
     static TreeSet<User> users = new TreeSet<>();
 
@@ -69,15 +64,22 @@ public class Main_Base {
         if(login==null&&password==null){
             r.reply("Fill in both fields login and password");
             return users;
-        }
-        else {
-            ArrayList<Note> notes=new ArrayList<>();
+        }else {
+
+            for (User user : users) {
+                if (user.getLogin().equals(login)) {
+                    r.reply("User " + login + " already exists. Choose another login!");
+                    return users;
+                }
+            }
+            ArrayList<Note> notes = new ArrayList<>();
             User user = new User();
             user.setLogin(login);
             user.setPassword(password);
             user.setNotes(notes);
             users.add(user);
         }
+        System.out.println(users);
             return users;
 
     }
@@ -100,7 +102,7 @@ public class Main_Base {
                 }
             }
             if (!flag) {
-                System.out.println("No such user " + login + " sign in!");
+                r.reply("Wrong input! Try again or sign in!");
                 return null;
             }
         }
@@ -118,8 +120,6 @@ public class Main_Base {
     }
 
     public static TreeSet<User> addNote (User user) {
-
-        ArrayList<Note> notes;
 
         r.addNote();
         String name = r.name;
@@ -194,7 +194,7 @@ public class Main_Base {
             int meeteing = 0;
             int note = 0;
             int birthday = 0;
-            String reply = "The quantity of each type of events is: \n";
+
 
             for (Note n: user.getNotes()) {
                 switch (n.getType()){
@@ -220,7 +220,68 @@ public class Main_Base {
             return arr;
         }
     }
+
+    public static TreeSet<User> menu(TreeSet<User> users){
+        int responseAuthorization =0;
+        User user = new User();
+        while (!(responseAuthorization == 4)) {
+
+           // User user = new User();
+            r.menuAuthorization();
+            if (r.responseAuthorization == null) {
+                break;
+            }
+            if (isNumber(r.responseAuthorization)) {
+                responseAuthorization = Integer.parseInt(r.responseAuthorization);
+            }
+            else {
+                r.reply("Try again");}
+            switch (responseAuthorization) {
+                case 1:
+                    users = signIn(users);
+                    break;
+                case 2:
+                    user = authorization(users);
+                    break;
+                case 3:{
+                   // if(user.getNotes().isEmpty()){
+                    r.subMenu1();
+                        int responsesubMenu1 =0;
+                        while (!(responsesubMenu1 == 4)) {
+
+                            r.menuAuthorization();
+                            if (r.responsesubMenu1 == null) {
+                                break;
+                            }
+                            if (isNumber(r.responsesubMenu1)) {
+                                responsesubMenu1 = Integer.parseInt(r.responsesubMenu1);
+                            }
+                            else {
+                                r.reply("Try again");}
+                            switch (responsesubMenu1) {
+                                case 1:
+                                    users = addNote(user);
+                                    break;
+                                case 4:
+                                    break;
+                                default:
+                                    r.reply("Type numbers 1 or 4 only!");
+                            }
+                        }
+                  //  }
+                    break;
+                }
+                case 4:
+                    break;
+                default:
+                    r.reply("Type numbers from 1 to 4 only!");
+            }
+        }
+        return  users;
+    }
+
     public static void main(String[] args) {
 
+        users = menu(users);
     }
 }
