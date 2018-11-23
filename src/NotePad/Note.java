@@ -47,6 +47,11 @@ public class Note {
         }
     }
 
+    public Type getType() {
+        return type;
+    }
+
+
     @Override
     public String toString() {
         return "Note{" +
@@ -56,6 +61,16 @@ public class Note {
                 ", place='" + place + '\'' +
                 ", contact='" + contact + '\'' +
                 ", type=" + type +
+                '}';
+    }
+    public String toStringCount(int quantity) {
+        return "Note{" +
+                "name='" + name + '\'' +
+                ", text='" + text + '\'' +
+                ", date='" + date + '\'' +
+                ", place='" + place + '\'' +
+                ", contact='" + contact + '\'' +
+                ", type=" + type +"("+ quantity+")"+
                 '}';
     }
 }

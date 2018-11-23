@@ -3,5 +3,5 @@ import java.util.ArrayList;
 
 public interface Counter {
 
-    Type countPosts(ArrayList<Note> notes);
+    int[] countTypes(User user);
 }
