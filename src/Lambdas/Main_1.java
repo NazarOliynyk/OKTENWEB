@@ -11,14 +11,14 @@ public class Main_1 {
             }
         };
 
-//        Inter_1 inter_1_2=()-> System.out.println("Hello!");
-//        Inter_1 inter_1_3= ()->{
-//            System.out.println("Hello");
-//            System.out.println("!!!!");
-//        };
+        Inter_1 inter_1_2=()-> System.out.println("Hello!");
+        Inter_1 inter_1_3= ()->{
+            System.out.println("Hello");
+            System.out.println("!!!!");
+        };
 
-//        inter_1_1.some();
-//        inter_1_2.some();
-//        inter_1_3.some();
+        inter_1_1.some();
+        inter_1_2.some();
+        inter_1_3.some();
     }
 }

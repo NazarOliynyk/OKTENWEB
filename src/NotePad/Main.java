@@ -10,7 +10,7 @@ public class Main {
 
 
     static TreeSet<User> users = new TreeSet<>();
-    static CountTypes countTypes = new CountTypes();
+  //  static CountTypes countTypes = new CountTypes();
 
     static int quantityOfTypes(Type type, int[] arr){
         int quantity =0;
@@ -82,10 +82,11 @@ public class Main {
         } else if (user.getNotes().isEmpty()) {
             System.out.println("User " + user.getLogin() + " has not got any notes yet!");
         } else {
+            user.getNotes().sort((o1, o2) -> o2.getType().compareTo(o1.getType()));
             for (Note note : user.getNotes()) {
-                reply += note.toString()+"("+quantityOfTypes(note.getType(), countTypes.countTypes(user))+ ") \n";
+                reply += note.toString()+"("+quantityOfTypes(note.getType(), counter.countTypes(user))+ ") \n";
             }
-
+                                                                // countTypes.countTypes(user)
         }
 
 
@@ -103,9 +104,10 @@ public class Main {
             if (user.getNotes().isEmpty()) {
                 System.out.println("User " + user.getLogin() + " has not got any notes yet!");
             } else {
+                user.getNotes().sort((o1, o2) -> o2.getType().compareTo(o1.getType()));
                 for (Note note : user.getNotes()) {
                     if (note.getType() == type)
-                        reply += note.toStringCount(quantityOfTypes(note.getType(), countTypes.countTypes(user))) + " \n";
+                        reply += note.toStringCount(quantityOfTypes(note.getType(), counter.countTypes(user))) + " \n";
                     //reply += note.toString() + "(" + quantityOfTypes(note.getType(), countTypes.countTypes(user)) + ") \n";
                     flag = true;
                 }
@@ -123,41 +125,73 @@ public class Main {
     }
 
 
-    static class CountTypes implements Counter{
+//    static class CountTypes implements Counter{
+//
+//        @Override
+//        public int[] countTypes(User user) {
+//
+//            int event = 0;
+//            int meeting = 0;
+//            int note = 0;
+//            int birthday = 0;
+//            String reply = "The quantity of each type of events is: \n";
+//
+//            for (Note n: user.getNotes()) {
+//                switch (n.getType()){
+//                    case EVENT:{
+//                        event++;
+//                        break;
+//                    }
+//                    case MEETING:{
+//                        meeting++;
+//                        break;
+//                    }
+//                    case NOTE:{
+//                        note++;
+//                        break;
+//                    }
+//                    case BIRTHDAY:{
+//                        birthday++;
+//                        break;
+//                    }
+//                }
+//            }
+//            int[] arr={event, meeting, note, birthday };
+//            return arr;
+//        }
+//    }
 
-        @Override
-        public int[] countTypes(User user) {
+    static Counter counter =  user->{
+        int event = 0;
+        int meeteing = 0;
+        int note = 0;
+        int birthday = 0;
+        String reply = "The quantity of each type of events is: \n";
 
-            int event = 0;
-            int meeteing = 0;
-            int note = 0;
-            int birthday = 0;
-            String reply = "The quantity of each type of events is: \n";
-
-            for (Note n: user.getNotes()) {
-                switch (n.getType()){
-                    case EVENT:{
-                        event++;
-                        break;
-                    }
-                    case MEETING:{
-                        meeteing++;
-                        break;
-                    }
-                    case NOTE:{
-                        note++;
-                        break;
-                    }
-                    case BIRTHDAY:{
-                        birthday++;
-                        break;
-                    }
+        for (Note n: user.getNotes()) {
+            switch (n.getType()){
+                case EVENT:{
+                    event++;
+                    break;
+                }
+                case MEETING:{
+                    meeteing++;
+                    break;
+                }
+                case NOTE:{
+                    note++;
+                    break;
+                }
+                case BIRTHDAY:{
+                    birthday++;
+                    break;
                 }
             }
-            int[] arr={event, meeteing, note, birthday };
-            return arr;
         }
-    }
+        int[] arr={event, meeteing, note, birthday };
+        return arr;
+
+    };
         public static void main(String[] args) {
 
 

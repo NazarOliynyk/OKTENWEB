@@ -5,11 +5,10 @@ import java.util.TreeSet;
 
 import static NotePad.Type.*;
 
-public class Main_Base {
+public class Main_Lambdas {
 
     static TreeSet<User> users = new TreeSet<>();
 
-    static CountTypes countTypes = new CountTypes();
 
     static Reader r = new Reader();
 
@@ -27,19 +26,19 @@ public class Main_Base {
     static Type defineType(int typeNumber){
         Type type = null;
 
-           switch (typeNumber){
-               case 1: type=EVENT;
-                   break;
-               case 2: type=MEETING;
-                   break;
-               case 3: type=NOTE;
-                   break;
-               case 4: type=BIRTHDAY;
-                   break;
-               default:
-                   r.reply("Set the number of a type within 1 and 4!");
-                   break;
-           }
+        switch (typeNumber){
+            case 1: type=EVENT;
+                break;
+            case 2: type=MEETING;
+                break;
+            case 3: type=NOTE;
+                break;
+            case 4: type=BIRTHDAY;
+                break;
+            default:
+                r.reply("Set the number of a type within 1 and 4!");
+                break;
+        }
         return type;
     }
 
@@ -58,7 +57,7 @@ public class Main_Base {
     }
 
     public static TreeSet<User> signIn(TreeSet<User> users) {
-       r.authorization();
+        r.authorization();
         String login = r.login;
         String password = r.password;
         if(login==null&&password==null){
@@ -70,7 +69,7 @@ public class Main_Base {
                 if (user.getLogin().equals(login)) {
                     r.reply("User " + login + " already exists. Choose another login!");
                     break;
-                   // return users;
+                    // return users;
                 }
             }
             ArrayList<Note> notes = new ArrayList<>();
@@ -81,7 +80,7 @@ public class Main_Base {
             users.add(user);
         }
         System.out.println(users);
-            return users;
+        return users;
 
     }
 
@@ -153,8 +152,9 @@ public class Main_Base {
     public static void printAllNotes(User user) {
 
         String reply = "There are following notes of the user " + user.getLogin() + ": \n";
-            for (Note note : user.getNotes()) {
-                reply += note.toStringCount(quantityOfTypes(note.getType(), countTypes.countTypes(user))) + " \n";
+        user.getNotes().sort((o1, o2) -> o2.getType().compareTo(o1.getType()));
+        for (Note note : user.getNotes()) {
+            reply += note.toStringCount(quantityOfTypes(note.getType(), counter.countTypes(user))) + " \n";
         }
         r.reply(reply);
         System.out.println(reply);
@@ -176,115 +176,112 @@ public class Main_Base {
 
         String reply = "There are following notes of the user " + user.getLogin() + "and event- "+type+": \n";
 
-                System.out.println("User " + user.getLogin() + " has not got any notes yet!");
-                for (Note note : user.getNotes()) {
-                    if (note.getType() == type)
-                        reply += note.toStringCount(quantityOfTypes(note.getType(), countTypes.countTypes(user))) + " \n";
-                    }
+        System.out.println("User " + user.getLogin() + " has not got any notes yet!");
+        user.getNotes().sort((o1, o2) -> o2.getType().compareTo(o1.getType()));
+        for (Note note : user.getNotes()) {
+            if (note.getType() == type)
+                reply += note.toStringCount(quantityOfTypes(note.getType(), counter.countTypes(user))) + " \n";
+        }
 
         r.reply(reply);
         System.out.println(reply);
     }
 
 
-    static class CountTypes implements Counter{
+    static Counter counter =  user->{
+        int event = 0;
+        int meeteing = 0;
+        int note = 0;
+        int birthday = 0;
+        String reply = "The quantity of each type of events is: \n";
 
-        @Override
-        public int[] countTypes(User user) {
-
-            int event = 0;
-            int meeteing = 0;
-            int note = 0;
-            int birthday = 0;
-
-
-            for (Note n: user.getNotes()) {
-                switch (n.getType()){
-                    case EVENT:{
-                        event++;
-                        break;
-                    }
-                    case MEETING:{
-                        meeteing++;
-                        break;
-                    }
-                    case NOTE:{
-                        note++;
-                        break;
-                    }
-                    case BIRTHDAY:{
-                        birthday++;
-                        break;
-                    }
+        for (Note n: user.getNotes()) {
+            switch (n.getType()){
+                case EVENT:{
+                    event++;
+                    break;
+                }
+                case MEETING:{
+                    meeteing++;
+                    break;
+                }
+                case NOTE:{
+                    note++;
+                    break;
+                }
+                case BIRTHDAY:{
+                    birthday++;
+                    break;
                 }
             }
-            int[] arr={event, meeteing, note, birthday };
-            return arr;
         }
-    }
+        int[] arr={event, meeteing, note, birthday };
+        return arr;
+
+    };
 
     public static TreeSet<User> subMenu1(TreeSet<User> users, User user){
 
         int responsesubMenu1 =0;
-            r.subMenu1();
-            while (!(responsesubMenu1 == 4)) {
-                if (r.responsesubMenu1 == null) {
-                    break;
-                }
-                else  if (!isNumber(r.responsesubMenu1)) {
-                    r.reply("Try again");
-                    break;
-                } else {
-                    responsesubMenu1 = Integer.parseInt(r.responsesubMenu1);
+        r.subMenu1();
+        while (!(responsesubMenu1 == 4)) {
+            if (r.responsesubMenu1 == null) {
+                break;
+            }
+            else  if (!isNumber(r.responsesubMenu1)) {
+                r.reply("Try again");
+                break;
+            } else {
+                responsesubMenu1 = Integer.parseInt(r.responsesubMenu1);
 
-                    switch (responsesubMenu1) {
-                        case 1:
-                            users = addNote(user);
-                            return users;
+                switch (responsesubMenu1) {
+                    case 1:
+                        users = addNote(user);
+                        return users;
 
-                        case 4:
-                            break;
-                        default:
-                            r.reply("Type numbers 1 or 4 only!");
-                            return users;
-                    }
+                    case 4:
+                        break;
+                    default:
+                        r.reply("Type numbers 1 or 4 only!");
+                        return users;
                 }
+            }
         }
         return users;
     }
 
     public static TreeSet<User> subMenu2(TreeSet<User> users, User user){
         int responsesubMenu2 =0;
-            r.subMenu2();
+        r.subMenu2();
 
-            while (!(responsesubMenu2 == 4)) {
+        while (!(responsesubMenu2 == 4)) {
 
-                if (r.responsesubMenu2 == null) {
-                    break;
+            if (r.responsesubMenu2 == null) {
+                break;
+            }
+            else if (!isNumber(r.responsesubMenu2)) {
+                r.reply("Try again");
+                break;
+            } else {
+                responsesubMenu2 = Integer.parseInt(r.responsesubMenu2);
+
+                switch (responsesubMenu2) {
+                    case 1:
+                        users = addNote(user);
+                        return users;
+                    case 2:
+                        printAllNotes(user);
+                        return users;
+                    case 3:
+                        printNotesByType(user);
+                        return users;
+                    case 4:
+                        break;
+                    default:
+                        r.reply("Type numbers within 1 and 4 only!");
+                        return users;
                 }
-                else if (!isNumber(r.responsesubMenu2)) {
-                    r.reply("Try again");
-                    break;
-                } else {
-                    responsesubMenu2 = Integer.parseInt(r.responsesubMenu2);
-
-                    switch (responsesubMenu2) {
-                        case 1:
-                            users = addNote(user);
-                            return users;
-                        case 2:
-                            printAllNotes(user);
-                            return users;
-                        case 3:
-                            printNotesByType(user);
-                            return users;
-                        case 4:
-                            break;
-                        default:
-                            r.reply("Type numbers within 1 and 4 only!");
-                            return users;
-                    }
-                }
+            }
         }
         return users;
     }
@@ -340,3 +337,4 @@ public class Main_Base {
         users = menu(users);
     }
 }
+

@@ -79,6 +79,18 @@ public class Reader {
         contact = JOptionPane.showInputDialog("Set the contact of a note");
         type = JOptionPane.showInputDialog(typeRequest);
     }
+
+    String typeRequest1 = "Set the name of a note: \n"+
+            "1 - case EVENT \n"+
+            "2 - case MEETING \n"+
+            "3 - case NOTE \n"+
+            "4 - case BIRTDAY \n";
+    String selectType;
+
+    void selectType(){
+
+        selectType = JOptionPane.showInputDialog(typeRequest1);
+    }
     // reply
 
     void reply(String reply){
