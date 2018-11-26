@@ -290,7 +290,6 @@ public class Main_Lambdas {
         int responseAuthorization =0;
         User user = new User();
         while (!(responseAuthorization == 4)) {
-
             r.menuAuthorization();
             if (r.responseAuthorization == null) {
                 break;

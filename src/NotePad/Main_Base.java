@@ -184,6 +184,8 @@ public class Main_Base {
 
         r.reply(reply);
         System.out.println(reply);
+
+
     }
 
 
@@ -236,12 +238,10 @@ public class Main_Base {
                     break;
                 } else {
                     responsesubMenu1 = Integer.parseInt(r.responsesubMenu1);
-
                     switch (responsesubMenu1) {
                         case 1:
                             users = addNote(user);
                             return users;
-
                         case 4:
                             break;
                         default:
@@ -293,7 +293,6 @@ public class Main_Base {
         int responseAuthorization =0;
         User user = new User();
         while (!(responseAuthorization == 4)) {
-
             r.menuAuthorization();
             if (r.responseAuthorization == null) {
                 break;
