@@ -22,4 +22,32 @@ public class Reader {
     void deleteCompany(){
         deleteCompanyName = JOptionPane.showInputDialog("Set the name of a company you want to Delete");
     }
+
+    String responseSubMenu1;
+    void subMenu1(String request){
+
+        responseSubMenu1 = JOptionPane.showInputDialog(request);
+    }
+    String addDepartmentName;
+    void addDepartment(){
+        addDepartmentName = JOptionPane.showInputDialog("Set the name of a department you want to Create");
+    }
+    String deleteDepartmentName;
+    void deleteDepartment(){
+        deleteDepartmentName = JOptionPane.showInputDialog("Set the name of a department you want to Delete");
+    }
+
+    String responseSubMenu2;
+    void subMenu2(String request){
+
+        responseSubMenu2 = JOptionPane.showInputDialog(request);
+    }
+    String addWorkerName;
+    void addWorker(){
+        addWorkerName = JOptionPane.showInputDialog("Set the name of a worker you want to Hire");
+    }
+    String deleteWorkerName;
+    void deleteWorker(){
+        deleteWorkerName = JOptionPane.showInputDialog("Set the name of a worker you want to Fire");
+    }
 }

@@ -25,7 +25,8 @@ public class Main_Base {
         }
 
         if(flag){
-            System.out.println("The company " + name+" already exists!");
+           // System.out.println("The company '" + name+"' already exists!");
+            r.reply("The company '" + name+"' already exists!");
             return companies;
         }else {
             company.setName(name);
@@ -50,8 +51,8 @@ public class Main_Base {
         }
 
         if(!flag){
-            System.out.println("The company " + name+" does not exist!");
-            r.reply("The company " + name+" does not exist!");
+            //System.out.println("The company '" + name+"' does not exist!");
+            r.reply("The company '" + name+"' does not exist!");
             return companies;
         }
         return companies;
@@ -69,7 +70,8 @@ public class Main_Base {
             }
         }
         if(!flag){
-            System.out.println("The company " + name+" does not exist!");
+            //System.out.println("The company '" + name+"' does not exist!");
+            r.reply("The company '" + name+"' does not exist!");
             return null;}
         return company;
     }
@@ -86,7 +88,8 @@ public class Main_Base {
             }
         }
         if(flag){
-            System.out.println("The department " + name+" already exists!");
+           // System.out.println("The department '" + name+"' already exists!");
+            r.reply("The department '" + name+"' already exists!");
             return company;
         }else {
             department.setName(name);
@@ -114,9 +117,9 @@ public class Main_Base {
         }
 
         if(!flag){
-            System.out.println("The department " + name+" does not exist!");
-            r.reply("The department " + name+" does not exist!");
-            return company;
+            //System.out.println("The department " + name+" does not exist!");
+            r.reply("The department '" + name+"' does not exist!");
+            return null;
         }
         return company;
     }
@@ -135,7 +138,8 @@ public class Main_Base {
             }
         }
         if(!flag){
-            System.out.println("The department " + name+" does not exist!");
+            //System.out.println("The department '" + name+"' does not exist!");
+            r.reply("The department '" + name+"' does not exist!");
             return null;}
         return department;
     }
@@ -175,7 +179,8 @@ public class Main_Base {
             }
         }
         if(!flag){
-            System.out.println("The worker "+name+" does not exist in department "+department.getName()+" of company "+company.getName());
+            System.out.println("The worker '"+name+"' does not exist in department '"+department.getName()+"' of company '"+company.getName()+"'");
+            r.reply("The worker '"+name+"' does not exist in department '"+department.getName()+"' of company '"+company.getName()+"'");
             return worker;
         }
         return worker;
@@ -188,7 +193,8 @@ public class Main_Base {
                 reply+= worker.toString();
             }
         }
-        System.out.println(reply);
+       // System.out.println(reply);
+        r.reply(reply);
     }
 
     public static void printBadWorkers(Department department){
@@ -198,27 +204,38 @@ public class Main_Base {
                 reply+= worker.toString();
             }
         }
-        System.out.println(reply);
+        //System.out.println(reply);
+        r.reply(reply);
     }
 
-    static String getRequestMainMenu(TreeSet<Company> companies){
-
+    static String getRequestMainMenu(TreeSet<Company> companies) {
         String list = "There are following companies: \n";
-        int i =1;
-        for (Company company1 : companies) {
-            list+=i+".  "+company1.getName()+"\n";
-            i++;
+        String response = null;
+        if (companies.isEmpty()) {
+           list += "...empty set...";
+        } else {
+
+            int i = 1;
+            for (Company company1 : companies) {
+                list += i + ".  '" + company1.getName() + "'\n";
+                i++;
+            }
         }
-        System.out.println(list);
-        return "Select the option: \n"+
-                "                   \n"+
-                "- type A - create and add a new company \n"+
-                "                   \n"+
-                "- type D - remove a company \n"+
-                "                   \n"+
-                "- To fill the staff select the name of a company from a list below: \n"+
-                list+"\n"+
-                "- press Cancel to exit";
+            //.out.println(list);
+            response= "Select the option: \n" +
+                    "                   \n" +
+                    "- press A - create and add a new company \n" +
+                    "                   \n" +
+                    "- press D - remove a company \n" +
+                    "                   \n" +
+                    "- Select the name of a company from a list below to fill the stuff: \n" +
+                    "                   \n" +
+                    list + "\n" +
+                    "                   \n" +
+                    "- press Cancel to exit \n" +
+                    "                   \n";
+
+        return response;
     }
 
     public static boolean mainMenu(TreeSet<Company> companies){
@@ -246,12 +263,152 @@ public class Main_Base {
                     String selectCompanyName = r.responseMainMenu;
                     company = selectCompany(selectCompanyName);
                     System.out.println(company);
+                    if(company==null){
+                        r.reply("Add a company!");
+                    }else {
+                        subMenu1(company);
+                    }
                 }
 
         }
     }
 
 
+    static String getRequestSubMenu1(Company company) {
+
+        String list = "There are following departments in company: '"+company.getName()+"'\n";
+        String response = null;
+        if (company.getDepartments().isEmpty()) {
+            list += "...empty set...";
+        } else {
+
+            int i = 1;
+            for (Department department1 : company.getDepartments()) {
+                list += i + ".  '" + department1.getName() + "'\n";
+                i++;
+            }
+        }
+
+        response= "Select the option: \n" +
+                "                   \n" +
+                "- press A - create and add a new department \n" +
+                "                   \n" +
+                "- press D - remove a department \n" +
+                "                   \n" +
+                "- Select the name of a department from a list below to fill the stuff: \n" +
+                "                   \n" +
+                list + "\n" +
+                "                   \n" +
+                "- press Cancel to exit \n" +
+                "                   \n";
+
+        return response;
+    }
+
+    public static boolean subMenu1(Company company){
+        Department department;
+
+        String request = getRequestSubMenu1(company);
+
+        while (true) {
+            r.subMenu1(request);
+            if (r.responseSubMenu1 == null) {
+                return false;
+            } else if (r.responseSubMenu1.equals("A")) {
+                r.addDepartment();
+                String addDepartmentName = r.addDepartmentName;
+                company = addDepartment(company, addDepartmentName);
+                request = getRequestSubMenu1(company);
+                System.out.println(companies);
+            } else if (r.responseSubMenu1.equals("D")){
+                r.deleteDepartment();
+                String deleteDepartmentName = r.deleteDepartmentName;
+                company = removeDepartment(company, deleteDepartmentName);
+                request = getRequestSubMenu1(company);
+            }
+            else {
+                String selectDepartmentName = r.responseSubMenu1;
+                department = selectDepartment(company, selectDepartmentName);
+                System.out.println(company);
+                if(department==null){
+                    r.reply("Ad a department!");
+                }
+                else {
+                    subMenu2(company, department);
+                }
+            }
+
+        }
+    }
+
+    static String getRequestSubMenu2(Department department) {
+
+        String list = "There are following workers in department: '"+department.getName()+"'\n";
+        String response = null;
+        if (department.getWorkers().isEmpty()) {
+            list += "...empty set...";
+        } else {
+
+            int i = 1;
+            for (Worker worker1 : department.getWorkers()) {
+                list += i + ".  '" + worker1.getName() + "'\n";
+                i++;
+            }
+        }
+
+        response= "Select the option: \n" +
+                "                   \n" +
+                "- press A - create and hire a new worker \n" +
+                "                   \n" +
+                "- press D - fire a worker \n" +
+                "                   \n" +
+                "- press G - print the list of good workers \n" +
+                "                   \n" +
+                "- press B - print the list of good workers \n" +
+                "                   \n" +
+                " The whole list of workers: \n" +
+                "                   \n" +
+                list + "\n" +
+                "                   \n" +
+                "- press Cancel to exit \n" +
+                "                   \n";
+
+        return response;
+    }
+
+    public static boolean subMenu2(Company company, Department department){
+        Worker worker;
+        Worker workerFired;
+
+        String request = getRequestSubMenu2(department);
+
+        while (true) {
+            r.subMenu2(request);
+            if (r.responseSubMenu2 == null) {
+                return false;
+            } else if (r.responseSubMenu2.equals("A")) {
+                r.addWorker();
+                String addWorkerName = r.addWorkerName;
+                department = addWorker(company, department, addWorkerName);
+                request = getRequestSubMenu2(department);
+                System.out.println(companies);
+            } else if (r.responseSubMenu2.equals("D")){
+                r.deleteWorker();
+                String deleteWorkerName = r.deleteWorkerName;
+                workerFired = removeWorker(company, department, deleteWorkerName);
+                request = getRequestSubMenu2(department);
+            }
+            else if (r.responseSubMenu2.equals("G")){
+               printGoodWorkers(department);
+            }
+            else if (r.responseSubMenu2.equals("B")){
+                printBadWorkers(department);
+            }else {
+                r.reply("Select from letters on the menu!");
+            }
+
+        }
+    }
 
     public static void main(String[] args) {
 
