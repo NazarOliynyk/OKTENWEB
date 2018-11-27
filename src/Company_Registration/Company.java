@@ -5,7 +5,7 @@ import java.util.TreeSet;
 /**
  * Created by okten29 on 11/26/18.
  */
-public class Company {
+public class Company implements Comparable<Company>{
 
     String name;
     TreeSet<Department> departments;
@@ -27,10 +27,34 @@ public class Company {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Company company = (Company) o;
+
+        if (name != null ? !name.equals(company.name) : company.name != null) return false;
+        return departments != null ? departments.equals(company.departments) : company.departments == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (departments != null ? departments.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Company{" +
                 "name='" + name + '\'' +
                 ", departments=" + departments +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Company o) {
+        return this.getName().compareTo(o.getName());
     }
 }

@@ -1,15 +1,16 @@
 package Company_Registration;
 
-import java.util.ArrayList;
-import java.util.TreeSet;
-import java.util.Random;
+import JobAdds.*;
+
+import java.util.*;
 import java.util.Random;
 /**
  * Created by okten29 on 11/26/18.
  */
-public class Main {
+public class Main_Base {
 
     static TreeSet<Company> companies = new TreeSet<>();
+    static Reader r = new Reader();
 
     public static TreeSet<Company> addCompany(String name){
 
@@ -30,6 +31,28 @@ public class Main {
             company.setName(name);
             company.setDepartments(departments);
             companies.add(company);
+        }
+        return companies;
+    }
+    public static TreeSet<Company> removeCompany(String name){
+
+        boolean flag=false;
+        Company company = new Company();
+
+        Iterator<Company> iterator = companies.iterator();
+        while (iterator.hasNext()){
+            Company next = iterator.next();
+            if(next.getName().equals(name)){
+                iterator.remove();
+                flag=true;
+                return companies;
+            }
+        }
+
+        if(!flag){
+            System.out.println("The company " + name+" does not exist!");
+            r.reply("The company " + name+" does not exist!");
+            return companies;
         }
         return companies;
     }
@@ -73,6 +96,31 @@ public class Main {
         }
         return company;
     }
+
+    public static Company removeDepartment(Company company, String name){
+
+        boolean flag=false;
+        TreeSet<Department> departments = company.getDepartments();
+
+        Iterator<Department> iterator = departments.iterator();
+        while (iterator.hasNext()){
+            Department next = iterator.next();
+            if (next.getName().equals(name)){
+                iterator.remove();
+                company.setDepartments(departments);
+                flag=true;
+                return company;
+            }
+        }
+
+        if(!flag){
+            System.out.println("The department " + name+" does not exist!");
+            r.reply("The department " + name+" does not exist!");
+            return company;
+        }
+        return company;
+    }
+
 
     public static Department selectDepartment(Company company, String name){
 
@@ -128,7 +176,7 @@ public class Main {
         }
         if(!flag){
             System.out.println("The worker "+name+" does not exist in department "+department.getName()+" of company "+company.getName());
-        return worker;
+            return worker;
         }
         return worker;
     }
@@ -153,40 +201,61 @@ public class Main {
         System.out.println(reply);
     }
 
+    static String getRequestMainMenu(TreeSet<Company> companies){
+
+        String list = "There are following companies: \n";
+        int i =1;
+        for (Company company1 : companies) {
+            list+=i+".  "+company1.getName()+"\n";
+            i++;
+        }
+        System.out.println(list);
+        return "Select the option: \n"+
+                "                   \n"+
+                "- type A - create and add a new company \n"+
+                "                   \n"+
+                "- type D - remove a company \n"+
+                "                   \n"+
+                "- To fill the staff select the name of a company from a list below: \n"+
+                list+"\n"+
+                "- press Cancel to exit";
+    }
+
+    public static boolean mainMenu(TreeSet<Company> companies){
+        Company company ;
+
+        String request = getRequestMainMenu(companies);
+
+        while (true) {
+            r.mainMenu(request);
+            if (r.responseMainMenu == null) {
+                return false;
+            } else if (r.responseMainMenu.equals("A")) {
+                    r.addCompany();
+                    String addCompanyName = r.addCompanyName;
+                    companies = addCompany(addCompanyName);
+                    request = getRequestMainMenu(companies);
+                    System.out.println(companies);
+                } else if (r.responseMainMenu.equals("D")){
+                    r.deleteCompany();
+                    String deleteCompanyName = r.deleteCompanyName;
+                    companies = removeCompany(deleteCompanyName);
+                    request = getRequestMainMenu(companies);
+                }
+                else {
+                    String selectCompanyName = r.responseMainMenu;
+                    company = selectCompany(selectCompanyName);
+                    System.out.println(company);
+                }
+
+        }
+    }
+
 
 
     public static void main(String[] args) {
-        companies = addCompany("Alfa");
-        Company beta = selectCompany("Beta");
-        companies = addCompany("Alfa");
-        Company alfa = selectCompany("Alfa");
-        System.out.println(alfa);
 
-        alfa = addDepartment(alfa, "FirstDepartment");
-        Department secondDepartment = selectDepartment(alfa, "SecondDepartment");
-        alfa = addDepartment(alfa, "FirstDepartment");
-        Department firstDepartment = selectDepartment(alfa, "FirstDepartment");
-        System.out.println(alfa);
-        //System.out.println(firstDepartment.toString());
-
-        firstDepartment = addWorker(alfa, firstDepartment, "Bob");
-        firstDepartment = addWorker(alfa, firstDepartment, "Dilan");
-        firstDepartment = addWorker(alfa, firstDepartment, "John");
-        System.out.println(firstDepartment);
-
-        Worker worker1 = removeWorker(alfa, firstDepartment, "Faked Worker");
-        Worker worker2 = removeWorker(alfa, firstDepartment, "Dilan");
-        //System.out.println(worker2);
-       // System.out.println(alfa);
-
-        firstDepartment = addWorker(alfa, firstDepartment, "Edik");
-        System.out.println(firstDepartment);
-        firstDepartment = addWorker(alfa, firstDepartment, "Maxim");
-        System.out.println(firstDepartment);
-        firstDepartment = addWorker(alfa, firstDepartment, "Richard");
-        System.out.println(firstDepartment);
-        //printGoodWorkers(firstDepartment);
-        //printBadWorkers(firstDepartment);
-        //System.out.println(alfa);
+        mainMenu(companies);
     }
 }
+
