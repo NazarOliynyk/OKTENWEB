@@ -241,7 +241,6 @@ public class Main_Base {
                         case 1:
                             users = addNote(user);
                             return users;
-
                         case 4:
                             break;
                         default:

@@ -269,10 +269,11 @@ public class Main_1 {
             if (r.response == null) {
                break;
             }
-            if (isNumber(r.response)) {
+            if (!isNumber(r.response)) {
+                r.reply("Try again");
 
-                    response = Integer.parseInt(r.response );
-            }
+            }else {
+                response = Integer.parseInt(r.response );
                 switch (response) {
                     case 1:
                         addUser(users);
@@ -290,7 +291,7 @@ public class Main_1 {
                         break;
 
                     case 4:
-                         deleteAd(posts);
+                        deleteAd(posts);
 
                         break;
                     case 5:
@@ -313,7 +314,7 @@ public class Main_1 {
 
                     default:
                         break;
-
+                    }
                 }
             }
 
